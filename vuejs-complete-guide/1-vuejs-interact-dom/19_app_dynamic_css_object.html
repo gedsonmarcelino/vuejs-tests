@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Document</title>
+    <style>
+        .demo{
+            display: inline-block;
+            width: 50px;
+            height: 50px;
+            background-color: gray;
+            margin: 5px;
+        }
+
+        .red{
+            background-color: red;
+        }
+        .blue{
+            background-color: blue;
+        }
+    </style>
+</head>
+<body>
+    
+    <div id="app">
+        <div class="demo" @click="attachRed = !attachRed" :class="divClass"></div>
+        <div class="demo"></div>
+        <div class="demo"></div>
+    </div>
+
+    <script src="vue.js"></script>
+    <script>
+        new Vue({
+            el:'#app',
+            data:{
+                attachRed: false
+            },
+
+            computed: {
+                divClass:function(){
+                    return {
+                        red: this.attachRed,
+                        blue: !this.attachRed
+                    }
+                }
+            }
+        })
+    </script>
+</body>
+</html>
