@@ -74,7 +74,7 @@ new Vue({
             return Math.floor(Math.random() * (max - min + 1)) + min;
         },
 
-        _actionLog: function( player, damage, type = 'hit' ){
+        _actionLog: function( player, damage, type = 'hits' ){
 
             if ( player == 1 ){
                 player1 = 'YOU';
