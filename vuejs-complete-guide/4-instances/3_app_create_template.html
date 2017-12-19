@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Document</title>
+</head>
+<body>
+
+    <div id="app">
+        <h1 ref="myTitle">{{title}}</h1>
+        <p>Lorem ipsum dolor sit amet consectetur adipisicing elit. Quam id, saepe iusto atque est qui alias ipsum necessitatibus consequuntur laboriosam beatae autem quae nesciunt inventore a eveniet, ratione similique illum?</p>
+        <button @click="onChange">Change Title</button>
+        <newtitle></newtitle>
+    </div>
+
+    
+    <script src="vue.js"></script>
+    <script>
+
+        Vue.component('newtitle',{
+            template: '<h2><i>New Title by Component</i></h2>'
+        });
+
+        var vm = new Vue({
+            el: '#app',
+
+            data: {
+                title: 'My title!',
+            },
+            
+            methods: {
+                onChange: function(){
+                    this.title = 'Title was changed by method!' // It doesn't works
+                }
+            }
+        });    
+    </script>
+</body>
+</html>

@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Document</title>
+</head>
+<body>
+
+    <div id="app">
+        <h1 ref="myTitle">{{title}}</h1>
+        <p>Lorem ipsum dolor sit amet consectetur adipisicing elit. Quam id, saepe iusto atque est qui alias ipsum necessitatibus consequuntur laboriosam beatae autem quae nesciunt inventore a eveniet, ratione similique illum?</p>
+        <button @click="onChange">Change Title</button>
+
+        <h1 :style="{backgroundColor: color}">{{title2}}</h1>
+        <p ref="myPragraph">Second test!!</p>
+    </div>
+    
+    <script src="vue.js"></script>
+    <script>
+        var vm = new Vue({
+            el:'#app',
+            data: {
+                title: 'My title!',
+                title2: 'Title 2',
+                color: '',
+                dataText: 'Just a test for change the text into paragraph.'
+            },
+            
+            methods: {
+                onChange: function(){
+                    this.title = 'Title was changed by method!' // It doesn't works
+                    alert('The title wont be changed because he was changed outside instance vue.');
+                    
+                    this.title2 = 'Title 2 was changed by method!'
+                    this.color = 'red';
+                    
+                    this.dataText = 'Changed!' // It doesn't works.
+                }
+            }
+        });
+
+        vm.$refs.myTitle.innerText = 'Changed title outside the vue instance!';
+        vm.$refs.myPragraph.innerText = vm.$data.dataText;
+    </script>
+</body>
+</html>
