@@ -17,7 +17,7 @@
         },
         methods:{
             deleteQuote( index ){
-                if ( confirm("Are you sure that you want delete this item?") ){
+                if ( confirm("Are you sure that you want to delete this item?") ){
                     this.$emit('wasDeletedQuote', index);
                 }
             }
