@@ -11,7 +11,8 @@
                                 type="text"
                                 id="email"
                                 class="form-control"
-                                v-model="userData.email">
+                                :value="userData.email"
+                                @input=" userData.email = $event.target.value">
                     </div>
                     <div class="form-group">
                         <label for="password">Password</label>
@@ -70,13 +71,15 @@
                         <input
                                 type="radio"
                                 id="male"
-                                value="Male"> Male
+                                value="Male"
+                                v-model="gender"> Male
                     </label>
                     <label for="female">
                         <input
                                 type="radio"
                                 id="female"
-                                value="Female"> Female
+                                value="Female"
+                                v-model="gender"> Female
                     </label>
                 </div>
             </div>
@@ -85,16 +88,23 @@
                     <label for="priority">Priority</label>
                     <select
                             id="priority"
-                            class="form-control">
-                        <option></option>
+                            class="form-control"
+                            v-model="selectedPriority">
+                        <option v-for="(priority, index) in priorities" :key="index">{{priority}}</option>
                     </select>
                 </div>
             </div>
             <hr>
             <div class="row">
                 <div class="col-xs-12 col-sm-8 col-sm-offset-2 col-md-6 col-md-offset-3">
+                    <app-switch v-model="switchedData"></app-switch>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-xs-12 col-sm-8 col-sm-offset-2 col-md-6 col-md-offset-3">
                     <button
-                            class="btn btn-primary">Submit!
+                        @click.prevent="submitted"
+                        class="btn btn-primary">Submit!
                     </button>
                 </div>
             </div>
@@ -115,9 +125,10 @@
                         <ul>
                             <li v-for="item in sendEmail" :key="index">{{item}}</li>
                         </ul>
-                        <p>Gender:</p>
-                        <p>Priority:</p>
-                        <p>Switched:</p>
+                        <p>Gender: {{gender}}</p>
+                        <p>Priority: {{selectedPriority}}</p>
+                        <p>Switched:{{switchedData}}</p>
+                        <p>Submitted:{{isSubmitted}}</p>
                     </div>
                 </div>
             </div>
@@ -126,7 +137,12 @@
 </template>
 
 <script>
+    import Switch from './Switch.vue';
+
     export default {
+        components:{
+            appSwitch: Switch
+        },
         data(){
             return {
                 userData: {
@@ -135,7 +151,17 @@
                     age: 30
                 },
                 message: 'Lorem ipsum dolor sit',
-                sendEmail: []
+                sendEmail: [],
+                gender: 'Male',
+                priorities: ['High','Medium','Low'],
+                selectedPriority: 'Medium',
+                switchedData: true,
+                isSubmitted: false
+            }
+        },
+        methods:{
+            submitted(){
+                this.isSubmitted = true;
             }
         }
     }
