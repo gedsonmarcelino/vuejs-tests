@@ -1,24 +1,32 @@
 <template>
-<div>
-
-    <h3>Edit the User</h3>
-    <hr>
-    <div class="form-group">
-        <label for="">ID</label>
-        <input type="text" class="form-control" v-model="id">
+    <div>
+        <h3>Edit the User</h3>
+        <p>Locale: {{ $route.query.locale }}</p>
+        <p>Analytics: {{ $route.query.q }}</p>
+        <hr>
+        <button class="btn btn-primary" @click="confirmed = true">Confirm</button>
+        <div style="height: 700px"></div>
+        <p id="data">Some extra Data</p>
     </div>
-    <hr>
-    <p>Queries:</p>
-    <ul>
-        <li>Locale: {{ $route.query.locale }}</li>
-        <li>Analytics: {{ $route.query.num }}</li>
-    </ul>
-
-</div>
 </template>
 
 <script>
-    export default{
-        props:['id']
+    export default {
+        data() {
+          return {
+              confirmed: false
+          }
+        },
+        beforeRouteLeave(to, from, next) {
+            if (this.confirmed) {
+                next();
+            } else {
+                if (confirm('Are you sure?')) {
+                    next();
+                } else {
+                    next(false);
+                }
+            }
+        }
     }
 </script>
