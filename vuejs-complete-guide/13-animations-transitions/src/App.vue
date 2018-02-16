@@ -29,23 +29,140 @@
                     <div class="alert alert-info" v-if="show" key="info">This is some info!</div>
                     <div class="alert alert-warning" v-else key="warning">This is some warning!</div>
                 </transition>
+
+                <hr>
+
+                <button class="btn btn-primary" @click="load = !load">Load / Remove Element</button>
+                <br><br>
+                <transition
+                        @before-enter="beforeEnter"
+                        @enter="enter"
+                        @after-enter="afterEnter"
+                        @enter-cancelled="enterCancelled"
+
+                        @before-leave="beforeLeave"
+                        @leave="leave"
+                        @after-leave="afterLeave"
+                        @leave-cancelled="leaveCancelled"
+                        :css="false">
+                    <div class="box" v-if="load"></div>
+                </transition>
+                <hr>
+                <button class="btn btn-primary"
+                    @click="toogleComponent">Toogle Components</button>
+                <br><br>
+                <transition name="fade" mode="out-in">
+                    <component :is="selectedComponent"></component>
+                </transition>
+                <hr>
+                <button class="btn btn-primary" @click="addItem">Add Item</button>
+                <br><br>
+                <ul class="list-group">
+                    <transition-group name="slide">
+                        <li class="list-group-item" v-for="(number,index) in numbers"
+                                @click="removeItem(index)"
+                                style="cursor:pointer"
+                                :key="number">{{number}}</li>
+                    </transition-group>
+                </ul>
             </div>
         </div>
     </div>
 </template>
 
 <script>
+    import DangerAlert from './DangerAlert.vue'
+    import SuccessAlert from './SuccessAlert.vue'
     export default {
         data() {
             return {
-                show: true,
-                alertAnimation: 'fade'
+                show: false,
+                alertAnimation: 'fade',
+                load: true,
+                elementWidth: 100,
+                selectedComponent: 'app-success-alert',
+                numbers: [1,2,3,4,5]
             }
+        },
+        methods: {
+            beforeEnter(el) {
+                console.log('beforeEnter')
+                this.elementWidth = 100;
+                el.style.width = this.elementWidth + 'px';
+            },
+            enter(el, done) {
+                console.log('enter');
+                let round = 1;
+                const interval = setInterval(() => {
+                    el.style.width = (this.elementWidth + round * 10) + 'px';
+                    round++;
+                    if ( round > 20 ){
+                        clearInterval(interval)
+                        done()
+                    }
+                }, 20)
+            },
+            afterEnter(el) {
+                console.log('afterEnter');
+            },
+            enterCancelled(el) {
+                console.log('enterCancelled')
+            },
+            beforeLeave(el) {
+                console.log('beforeLeave')
+                this.elementWidth = 300;
+                el.style.width = this.elementWidth + 'px';
+            },
+            leave(el, done) {
+                console.log('leave')
+                let round = 1;
+                const interval = setInterval(() => {
+                    el.style.width = (this.elementWidth - round * 10) + 'px';
+                    round++;
+                    if ( round > 20 ){
+                        clearInterval(interval)
+                        done()
+                    }
+                }, 20)
+            },
+            afterLeave(el) {
+                console.log('afterLeave')
+            },
+            leaveCancelled(el) {
+                console.log('leaveCancelled')
+            },
+
+            toogleComponent(){
+                if ( this.selectedComponent == 'app-success-alert' ){
+                    this.selectedComponent = 'app-danger-alert';
+                } else {
+                    this.selectedComponent = 'app-success-alert';
+                }
+            },
+
+            addItem(){
+                const pos = Math.floor(Math.random()*this.numbers.length);
+                this.numbers.splice(pos, 0, this.numbers.length+1 );
+            },
+            removeItem(index){
+                this.numbers.splice( index, 1);
+            }
+        },
+        components: {
+            appDangerAlert: DangerAlert,
+            appSuccessAlert: SuccessAlert
         }
+
     }
 </script>
 
 <style>
+    .box {
+        width: 300px;
+        height: 100px;
+        background-color: lightgreen;
+    }
+
     .fade-enter {
         opacity: 0;
     }
@@ -80,6 +197,11 @@
         animation: slide-out 1s ease-out forwards;
         transition: opacity 1s;
         opacity: 0;
+        position: absolute;
+    }
+
+    .slide-move{
+        transition: transform 1s;
     }
 
     @keyframes slide-in {
